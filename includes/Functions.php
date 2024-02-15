@@ -29,15 +29,6 @@ namespace Shoplic\WPBridgeReact {
     {
         return str_replace(['/', '.', '-'], '_', $filename);
     }
-
-    // 스크립트 태그에 메타 데이터를 추가하는 함수 (개발 환경에서 사용)
-    function addMetaToScriptTag($tag, $handle, $src): string
-    {
-        if (isDevEnv()) {
-            return str_replace(' src', ' data-src', $tag);
-        }
-        return $tag;
-    }
     
     function absolutePathToUrl($absolutePath): string
     {
