@@ -5,18 +5,62 @@ use Exception;
 
 const SHOPLIC_WP_BRIDGE_REACT_VITE_CLIENT_SCRIPT_HANDLE = SHOPLIC_WP_BRIDGE_REACT . '-vite-client-script';
 
+/**
+ * Vite와 React를 WordPress에서 사용하기 위한 브리지 클래스입니다.
+ */
 class ReactBridge {
+    /**
+     * 싱글톤 인스턴스
+     * @var ReactBridge|null
+     */
     private static ?ReactBridge $instance = null;
 
+    /**
+     * vite가 생성한 매니페스트 파일의 경로
+     * @var string
+     */
     public string $manifestPath = '';
+
+    /**
+     * vite로 빌드된 파일들이 위치하는 디렉토리의 절대 경로
+     * @var string
+     */
     public string $absoluteDistPath = '';
+
+    /**
+     * vite (yarn start) 로컬 서버의 URL
+     * @var string
+     */
     public string $localhostUrl = 'https://localhost:5173';
+
+    /**
+     * vite로 빌드된 파일들의 URL 경로.
+     * enqueue_script에 사용됩니다
+     * @var string
+     */
     public string $distUrl = '';
 
+    /**
+     * 등록된 핸들러들의 목록
+     * enqueue후에 <script ... /> 에 'type'을 줄때 주로 사용됩니다.
+     * @var array
+     */
     public array $handles = [];
+
+    /**
+     * 로드된 매니페스트
+     * @var array
+     */
     public array $manifest = [];
 
-    static public function getInstance($localhostUrl, $absoluteDistPath): ReactBridge
+    /**
+     * 싱글톤 인스턴스를 반환합니다.
+     *
+     * @param string $localhostUrl 로컬 서버의 URL
+     * @param string $absoluteDistPath 빌드된 자산의 절대 경로
+     * @return ReactBridge 인스턴스
+     */
+    static public function getInstance(string $localhostUrl, string $absoluteDistPath): ReactBridge
     {
         if (is_null(self::$instance)) {
             self::$instance = new self($localhostUrl, $absoluteDistPath);
@@ -25,7 +69,13 @@ class ReactBridge {
         return self::$instance;
     }
 
-    public function __construct($localhostUrl, $absoluteDistPath)
+    /**
+     * ReactBridge 생성자입니다.
+     *
+     * @param string $localhostUrl 로컬 서버의 URL
+     * @param string $absoluteDistPath 빌드된 파일들이 있는 디렉토리의 절대 경로
+     */
+    public function __construct(string $localhostUrl, string $absoluteDistPath)
     {
         if (!is_null(self::$instance)) {
             return self::$instance;
@@ -40,7 +90,10 @@ class ReactBridge {
         add_action( 'init', [$this, 'init'] );
     }
 
-    public function init()
+    /**
+     * 초기화 메서드입니다. 개발 환경이나 프로덕션 환경에 따라 적절한 자산을 로드합니다.
+     */
+    public function init(): void
     {
         isDevEnv() ? $this->initDev() : $this->initProd();
 
@@ -48,12 +101,18 @@ class ReactBridge {
         add_filter('script_loader_tag', [$this, 'filterChangeType'], 999, 3);
     }
 
-    public function initDev()
+    /**
+     * 개발 환경에서 사용될 자산을 로드합니다.
+     */
+    public function initDev(): void
     {
         $this->loadViteDevAssets();
     }
 
-    public function initProd()
+    /**
+     * 프로덕션 환경에서 사용될 자산을 로드합니다.
+     */
+    public function initProd(): void
     {
         try {
             $this->manifest = $this->loadManifest() ?? [];
@@ -65,7 +124,13 @@ class ReactBridge {
         }
     }
 
-    public function addShortcode($args = [])
+    /**
+     * WordPress에서 사용할 shortcode를 등록합니다.
+     *
+     * @param array $args Shortcode와 관련된 설정 배열
+     * @return ReactBridge Chaining을 위한 인스턴스
+     */
+    public function addShortcode($args = []): ReactBridge
     {
         $shortcode_name = $args['shortcode_name'];
         $props = $args['props'];
@@ -84,7 +149,7 @@ class ReactBridge {
         $self = $this;
 
         add_shortcode($shortcode_name, function($attrs = []) use ($self, $shortcode_name, $props, $root_id, $entry_file_name) {
-            // attrs를 쓰는경우 js 세계로 넘겨주기 위해 props와 합칠 수 있도록 filter를 열어둔다
+            // shortcode에 attrs를 쓰는경우([my_shortcode test=1]) js 세계로 넘겨주기 위해 props와 합칠 수 있도록 filter를 열어둔다
             $props = apply_filters($shortcode_name . '_props_filter', $props, $attrs);
             $entry_handle = fileNameToHandle($entry_file_name);
 
@@ -101,9 +166,17 @@ class ReactBridge {
 
             return $self->render($root_id);
         });
+
+        return $this;
     }
 
-    public function render($root_id)
+    /**
+     * 지정된 root_id를 가진 컨테이너를 렌더링합니다.
+     *
+     * @param string $root_id 렌더링될 컴포넌트의 root ID
+     * @return string 렌더링된 HTML 문자열
+     */
+    public function render($root_id): string
     {
         ob_start(); ?>
 
@@ -122,7 +195,15 @@ class ReactBridge {
         return ob_get_clean();
     }
 
-    public function enqueueProductionAssets($entry_file_name, $entry_handle, $dependencyScripts = [], $dependencyStyles = []): void
+    /**
+     * 프로덕션 환경의 assets을 로드합니다.
+     *
+     * @param string $entry_file_name 엔트리 파일 이름 (src이후의 상대 경로를 포함한 파일 이름)
+     * @param string $entry_handle WordPress에서 사용될 핸들 이름
+     * @param array $dependencyScripts 의존성 스크립트 배열
+     * @param array $dependencyStyles 의존성 스타일 배열
+     */
+    public function enqueueProductionAssets(string $entry_file_name, string $entry_handle, array $dependencyScripts = [], array $dependencyStyles = []): void
     {   
         if (!isset($this->handles[$entry_handle])) {
             $this->handles[$entry_handle] = true;
@@ -162,7 +243,14 @@ class ReactBridge {
         }
     }
 
-    public function enqueueDevAssets($entry_file_name, $handle, $deps = []): void
+    /**
+     * 개발 환경에 사용되는 파일(js)들을 로드합니다
+     *
+     * @param string $entry_file_name 엔트리 파일 이름
+     * @param string $handle WordPress에서 사용될 핸들 이름
+     * @param array $deps 의존성 배열
+     */
+    public function enqueueDevAssets(string $entry_file_name, string $handle, array $deps = []): void
     {
         if (!isset($this->handles[$handle])) {
             $this->handles[$handle] = true;
@@ -190,7 +278,12 @@ class ReactBridge {
         }
     }
 
-    public function loadManifest()
+    /**
+     * 매니페스트 파일을 로드합니다.
+     *
+     * @return array|null 매니페스트 파일의 내용
+     */
+    public function loadManifest(): array
     {
         $manifest = null;
         $filePath = $this->manifestPath;
@@ -204,13 +297,19 @@ class ReactBridge {
         return $manifest;
     }
 
-    public function loadViteDevAssets()
+    /**
+     * 개발 환경에서 필요한 Vite 클라이언트 스크립트를 등록합니다.
+     */
+    public function loadViteDevAssets(): void
     {
         $this->registerViteClientScript();
         $this->injectReactRefreshScript();
     }
 
-    public function registerViteClientScript()
+    /**
+     * Vite 클라이언트 스크립트를 WordPress에 등록합니다.
+     */
+    public function registerViteClientScript(): void
     {
         $handle = SHOPLIC_WP_BRIDGE_REACT_VITE_CLIENT_SCRIPT_HANDLE;
         if (!isset($this->handles[$handle])) {
@@ -224,7 +323,10 @@ class ReactBridge {
         }
     }
 
-    public function injectReactRefreshScript()
+    /**
+     * React Fast Refresh 스크립트를 페이지에 주입합니다.
+     */
+    public function injectReactRefreshScript(): void
     {
         $handle = SHOPLIC_WP_BRIDGE_REACT_VITE_CLIENT_SCRIPT_HANDLE;
 
@@ -244,7 +346,12 @@ class ReactBridge {
         );
     }
 
-    public function getReactRefreshScript()
+    /**
+     * React Fast Refresh 스크립트의 내용을 반환합니다.
+     *
+     * @return string React Fast Refresh 스크립트
+     */
+    public function getReactRefreshScript(): void
     {
         // 출력 버퍼링 시작
         ob_start();
@@ -260,6 +367,13 @@ class ReactBridge {
         return ob_get_clean();
     }
 
+    /**
+     * 스크립트 태그의 type 속성을 module로 변경합니다.
+     *
+     * @param string $tag 처리할 스크립트 태그의 HTML 문자열
+     * @param string $handle 스크립트의 핸들 이름
+     * @return string 수정된 스크립트 태그의 HTML 문자열
+     */
     public function filterChangeType(string $tag, string $handle): string
     {   
         if (isset($this->handles[$handle])) {
