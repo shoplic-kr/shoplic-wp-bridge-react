@@ -3,8 +3,6 @@
 namespace {
     use Shoplic\WPBridgeReact\ReactBridge;
 
-    // shoplic_wp_bridge_react 글로벌 함수 정의
-    // ReactBridge 인스턴스를 생성하거나 기존 인스턴스를 반환
     function shoplic_wp_bridge_react($localhostUrl, $absoluteDistPath): Shoplic\WPBridgeReact\ReactBridge
     {
         return ReactBridge::getInstance($localhostUrl, $absoluteDistPath);
@@ -30,6 +28,7 @@ namespace Shoplic\WPBridgeReact {
         return str_replace(['/', '.', '-'], '_', $filename);
     }
     
+    // 절대 경로를 URL로 변환하는 함수
     function absolutePathToUrl($absolutePath): string
     {
         return str_replace(ABSPATH, home_url('/'), $absolutePath);

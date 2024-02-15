@@ -25,11 +25,8 @@ class ReactBridge {
         return self::$instance;
     }
 
-    // buildPath는 fullPath여야 합니다 /wp-content/themes/mytheme/build/assets/... 이런식으로
-    // 혹은 /wp-content/plugins/myplugin/build/assets/... 이런식으로
     public function __construct($localhostUrl, $absoluteDistPath)
     {
-        // @TODO: 보통 이렇게 하는지 검사가 필요하다
         if (!is_null(self::$instance)) {
             return self::$instance;
         }
@@ -74,17 +71,14 @@ class ReactBridge {
         $props = $args['props'];
         $entry_file_name = $args['entry_file_name'];
 
-        // check if the shortcode name is already registered
         if (shortcode_exists($shortcode_name)) {
-            // @TODO: throw error
-            return;
+            throw new Exception("Shortcode - '{$shortcode_name}'은(는) 이미 존재합니다.");
         }
 
         // props should have root_id
         $root_id = $props['root_id'];
         if (!$root_id) {
-            // @TODO: throw error
-            return;
+            throw new Exception("'root_id'가 지정되지 않았습니다.");
         }
 
         $self = $this;
