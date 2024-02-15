@@ -1,0 +1,22 @@
+{
+    "name": "shoplic/wp-bridge-react",
+    "description": "use react in wordpress",
+    "autoload": {
+        "files": [
+            "includes/Functions.php"
+        ],
+        "psr-4": {
+            "Shoplic\\WPBridgeReact\\": "includes/"
+        }
+    },
+    "authors": [
+        {
+            "name": "shoplic",
+            "email": "byeongin@shoplic.kr"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=7.4"
+    }
+}
