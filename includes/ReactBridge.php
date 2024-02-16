@@ -120,7 +120,6 @@ class ReactBridge {
             if (defined('WP_DEBUG') && WP_DEBUG) {
                 error_log($e->getMessage());
             }
-            return null;
         }
     }
 
