@@ -148,8 +148,8 @@ class ReactBridge {
         $self = $this;
 
         add_shortcode($shortcode_name, function($attrs = []) use ($self, $shortcode_name, $props, $root_id, $entry_file_name) {
-            // shortcode에 attrs를 쓰는경우([my_shortcode test=1]) js 세계로 넘겨주기 위해 props와 합칠 수 있도록 filter를 열어둔다
-            $props = apply_filters($shortcode_name . '_props_filter', $props, $attrs);
+            // insert all $attrs into $props
+            $props = array_merge($props, $attrs);
             $entry_handle = fileNameToHandle($entry_file_name);
 
             // 여기다, 숏코드를 사용하는 시점에 해당 숏코드의 entry_file_name을 바탕으로 script를 enqueue 한다.
