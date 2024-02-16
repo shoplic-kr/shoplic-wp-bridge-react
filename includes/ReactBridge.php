@@ -56,14 +56,14 @@ class ReactBridge {
     /**
      * 싱글톤 인스턴스를 반환합니다.
      *
-     * @param string $localhostUrl 로컬 서버의 URL
      * @param string $absoluteDistPath 빌드된 자산의 절대 경로
+     * @param string $localhostUrl 로컬 서버의 URL
      * @return ReactBridge 인스턴스
      */
-    static public function getInstance(string $localhostUrl, string $absoluteDistPath): ReactBridge
+    static public function getInstance(string $absoluteDistPath, string $localhostUrl): ReactBridge
     {
         if (is_null(self::$instance)) {
-            self::$instance = new self($localhostUrl, $absoluteDistPath);
+            self::$instance = new self($absoluteDistPath, $localhostUrl);
         }
 
         return self::$instance;
@@ -72,19 +72,19 @@ class ReactBridge {
     /**
      * ReactBridge 생성자입니다.
      *
-     * @param string $localhostUrl 로컬 서버의 URL
      * @param string $absoluteDistPath 빌드된 파일들이 있는 디렉토리의 절대 경로
+     * @param string $localhostUrl 로컬 서버의 URL
      */
-    public function __construct(string $localhostUrl, string $absoluteDistPath)
+    public function __construct(string $absoluteDistPath, string $localhostUrl)
     {
         if (!is_null(self::$instance)) {
             return self::$instance;
         }
 
         $this->absoluteDistPath = rtrim($absoluteDistPath, '/');
+        $this->localhostUrl = rtrim($localhostUrl, '/');
         $this->distUrl = absolutePathToUrl($this->absoluteDistPath);
         $this->manifestPath = $absoluteDistPath . '/.vite/manifest.json'; // this is for vite5
-        $this->localhostUrl = rtrim($localhostUrl, '/');
         
         // script 때문에 여기서 바로 init을 호출하면 안되고, hook에 등록해줘야 합니다
         add_action( 'init', [$this, 'init'] );

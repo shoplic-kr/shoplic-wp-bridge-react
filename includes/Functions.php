@@ -3,9 +3,9 @@
 namespace {
     use Shoplic\WPBridgeReact\ReactBridge;
 
-    function shoplic_wp_bridge_react($localhostUrl, $absoluteDistPath): Shoplic\WPBridgeReact\ReactBridge
+    function shoplic_wp_bridge_react($absoluteDistPath, $localhostUrl = 'https://localhost:5713'): Shoplic\WPBridgeReact\ReactBridge
     {
-        return ReactBridge::getInstance($localhostUrl, $absoluteDistPath);
+        return ReactBridge::getInstance($absoluteDistPath, $localhostUrl);
     }
 }
 
