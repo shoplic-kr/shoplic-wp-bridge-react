@@ -109,8 +109,32 @@ const {root_id, slider_speed} = main_slider_props;
 
 const root = document.getElementById(root_id)
 if (root) {
-    createRoot(root).render(<MainSlider speed={Number(slider_speed)} />)
+    createRoot(root).render(<MainSlider speed={Number(slider_speed ?? 1000)} />)
 }
+```
+
+### shortcode에서 attribute사용
+```
+[main_slider slide_count=5]
+```
+위처럼 사용하면,
+`main-slider.tsx`에서 아래와 같이 props에 전달됩니다.
+```tsx
+declare global {
+    const main_slider_props: { // main_slider_props는 props.object_name에 할당한 이름과 동일한 이름을 사용해야 합니다.
+        root_id: string,
+        slider_speed: string,
+        slide_count: string,
+    }
+}
+
+const {root_id, slider_speed, slide_count} = main_slider_props;
+
+const root = document.getElementById(root_id)
+if (root) {
+    createRoot(root).render(<MainSlider speed={Number(slider_speed ?? 1000)} count={Number(slide_count ?? 0)} />)
+}
+```
 ```
 
 ### 개발모드와 라이브모드 지정
