@@ -38,7 +38,7 @@ shoplic_wp_bridge_react($absoluteDistPath, $localhostUrl)->addShortcode([
     'props' => [
         'object_name' => 'hello_world_props',
         'root_id' => 'hello-world-root-id',
-        'my_wp_company' => 'shoplic',
+        'slider_speed' => 5400,
     ],
     'entry_file_name' => 'hello-world/hello-world.tsx',
 ]);
@@ -52,7 +52,7 @@ shoplic_wp_bridge_react($absoluteDistPath, $localhostUrl)->addShortcode([
 - [필수] `props`: shortcode와 연결된 php -> React App으로 넘겨줄 props 입니다.
 - [필수] `props.root_id`: React 컴포넌트를 렌더링할 HTML 요소의 ID 입니다.
 - [필수] `props.object_name`: wordpress의 wp_localize_script 함수를 통해 js에 전달할 props의 객체 이름 입니다.
-- `props.my_wp_company`: 커스텀한 값을 props에 추가할 수 있습니다.
+- `props.slider_speed`: 커스텀한 값을 props에 추가할 수 있습니다.
 - [필수] `entry_file_name`: React 컴포넌트의 엔트리 파일 경로입니다. src를 기준으로 최종 엔트리 파일까지의 경로를 모두 적어주세요.
 
 
@@ -100,15 +100,16 @@ import MainSlider from './MainSlider'
 // typescript를 사용하는 경우에만 설정해주세요
 declare global {
     const main_slider_props: { // main_slider_props는 props.object_name에 할당한 이름과 동일한 이름을 사용해야 합니다.
-        root_id: string
+        root_id: string,
+        slider_speed: string,
     }
 }
 
-const {root_id} = main_slider_props;
+const {root_id, slider_speed} = main_slider_props;
 
 const root = document.getElementById(root_id)
 if (root) {
-    createRoot(root).render(<MainSlider />)
+    createRoot(root).render(<MainSlider speed={Number(slider_speed)} />)
 }
 ```
 
