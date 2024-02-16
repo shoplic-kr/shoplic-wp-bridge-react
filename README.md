@@ -4,6 +4,10 @@ Shoplic WP Bridge React는 WordPress 환경에서 React 기반의 컴포넌트�
 
 [사용 에제](https://gitlab.com/byeongin_shoplic/shoplic-wp-bridge-react-example)
 
+## 주의
+
+- 라이브 모드에서는 `wp-config.php`파일에 꼭 `define('WP_ENVIRONMENT_TYPE', 'production');` 로 설정해 주시거나, `define('WP_ENVIRONMENT_TYPE', 'local');`를 삭제해 주세요.
+
 ## 주요 기능
 
 - **React 컴포넌트와의 연결**: WordPress의 shortcode를 통해 React 컴포넌트를 연결하고 렌더링합니다.
