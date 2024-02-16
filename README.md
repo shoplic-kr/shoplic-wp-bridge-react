@@ -11,7 +11,7 @@ Shoplic WP Bridge React는 WordPress 환경에서 React 기반의 컴포넌트�
 ## 주요 기능
 
 - **React 컴포넌트와의 연결**: WordPress의 shortcode를 통해 React 컴포넌트를 연결하고 렌더링합니다.
-- **개발 모드와 프로덕션 모드 지원**: 개발 중에는 HMR(Hot Module Replacement)을 통해 실시간으로 변경 사항을 반영할 수 있고, 프로덕션 모드에서는 최적화된 자산을 사용합니다.
+- **개발 모드와 프로덕션 모드 지원**: 개발 중에는 HMR(Hot Module Replacement)을 통해 실시간으로 변경 사항을 반영할 수 있고, 프로덕션 모드에서는 최적화된 assets(css,js)을 사용합니다.
 
 ## 시작하기
 
