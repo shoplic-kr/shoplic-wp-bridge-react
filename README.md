@@ -32,12 +32,13 @@ Shoplic WP Bridge React는 WordPress 환경에서 React 기반의 컴포넌트�
 
 ```php
 shoplic_wp_bridge_react($localhostUrl, $absoluteDistPath)->addShortcode([
-    'shortcode_name' => 'hello_world', // shortcode 이름
+    'shortcode_name' => 'hello_world', // 필수: shortcode 이름
     'props' => [
         'object_name' => 'hello_world_props',
-        'root_id' => 'hello-world-root-id', // React 컴포넌트를 렌더링할 HTML 요소의 ID
+        'root_id' => 'hello-world-root-id', // 필수: React 컴포넌트를 렌더링할 HTML 요소의 ID 입니다. 
+        'wp_company' => 'shoplic', // props에 커스텀한 key-value를 추가할 수 있습니다.
     ],
-    'entry_file_name' => 'hello-world/hello-world.tsx', // 엔트리 파일 경로
+    'entry_file_name' => 'hello-world/hello-world.tsx', //필수: 엔트리 파일 경로
 ]);
 ```
 
