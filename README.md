@@ -55,8 +55,6 @@ yarn create vite
 import react from '@vitejs/plugin-react'
 import tsconfigPaths from 'vite-tsconfig-paths' // typescript를 사용하는 경우에만 넣어주세요
 import {defineConfig} from 'vite'
-import path, {resolve} from 'path'
-import fs from 'fs'
 
 // https://vitejs.dev/config/
 export default defineConfig({
