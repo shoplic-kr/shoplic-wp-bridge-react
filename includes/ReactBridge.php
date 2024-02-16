@@ -350,7 +350,7 @@ class ReactBridge {
      *
      * @return string React Fast Refresh 스크립트
      */
-    public function getReactRefreshScript(): void
+    public function getReactRefreshScript(): string
     {
         // 출력 버퍼링 시작
         ob_start();
