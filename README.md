@@ -16,8 +16,9 @@ Shoplic WP Bridge React는 WordPress 환경에서 React 기반의 컴포넌트�
 ## 시작하기
 
 ### 필요 조건
-
-이 플러그인을 사용하기 위해서는 PHP 7.4 이상이 필요합니다. 또한, WordPress 환경이 구성되어 있어야 합니다.
+- PHP 7.4 이상
+- Vite5 이상
+- Wordpress X.X 이상 (미정)
 
 ### 설치 방법
 
