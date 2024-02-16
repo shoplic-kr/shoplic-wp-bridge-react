@@ -31,23 +31,29 @@ Shoplic WP Bridge React는 WordPress 환경에서 React 기반의 컴포넌트�
 `shoplic_wp_bridge_react(...)->addShortcode` 함수를 사용하여 React 컴포넌트와 연결할 shortcode를 등록할 수 있습니다. 이 함수는 여러 가지 인자값을 받습니다.
 
 ```php
-shoplic_wp_bridge_react($localhostUrl, $absoluteDistPath)->addShortcode([
-    'shortcode_name' => 'hello_world', // 필수: shortcode 이름
+$absoluteDistPath = get_template_directory() . '/my-react-app/dist';
+$localhostUrl = 'http://localhost:5173';
+shoplic_wp_bridge_react($absoluteDistPath, $localhostUrl)->addShortcode([
+    'shortcode_name' => 'hello_world',
     'props' => [
         'object_name' => 'hello_world_props',
-        'root_id' => 'hello-world-root-id', // 필수: React 컴포넌트를 렌더링할 HTML 요소의 ID 입니다. 
-        'wp_company' => 'shoplic', // props에 커스텀한 key-value를 추가할 수 있습니다.
+        'root_id' => 'hello-world-root-id',
+        'my_wp_company' => 'shoplic',
     ],
-    'entry_file_name' => 'hello-world/hello-world.tsx', //필수: 엔트리 파일 경로
+    'entry_file_name' => 'hello-world/hello-world.tsx',
 ]);
 ```
 
-- $localhostUrl: `https://localhost:5713` 처럼 vite에서 할당해주는 localhost 주소를 입력해주세요.
-- $absoluteDistPath: `__DIR__ . '/my-react-app/dist'` 처럼 full path를 입력해주세요.
-- `shortcode_name`: 등록할 shortcode의 이름입니다.
-- `props`: React 컴포넌트로 전달될 props입니다. `root_id`는 필수적으로 포함되어야 합니다.
-- `entry_file_name`: React 컴포넌트의 엔트리 파일 경로입니다. src를 기준으로 최종 엔트리 파일까지의 경로를 모두 적어주세요.
-- `props.object_name`: wordpress의 wp_localize_script 함수를 통해 js에 전달할 props의 객체 이름
+- [필수] $absoluteDistPath: 빌드시 파일들이 저장될 디렉토리의 full path를 입력해주세요.
+    - 테마에서 사용하는 react라면 `get_template_directory() . '/my-react-app/dist'` 을 사용해주세요.
+    - 플러그인 내부에서 개발중이라면, `plugin_dir_path(__FILE__) . 'my-react-app/dist` 을 사용해주세요.
+- $localhostUrl: `https://localhost:5713` 처럼 dev모드에서 vite에서 할당해주는 localhost 주소를 입력해주세요. 기본값은 `https://localhost:5713` 입니다.
+- [필수] `shortcode_name`: 등록할 shortcode의 이름입니다.
+- [필수] `props`: shortcode와 연결된 php -> React App으로 넘겨줄 props 입니다.
+- [필수] `props.root_id`: React 컴포넌트를 렌더링할 HTML 요소의 ID 입니다.
+- [필수] `props.object_name`: wordpress의 wp_localize_script 함수를 통해 js에 전달할 props의 객체 이름 입니다.
+- `props.my_wp_company`: 커스텀한 값을 props에 추가할 수 있습니다.
+- [필수] `entry_file_name`: React 컴포넌트의 엔트리 파일 경로입니다. src를 기준으로 최종 엔트리 파일까지의 경로를 모두 적어주세요.
 
 
 ### React 프로젝트 생성 (Vite 사용)
