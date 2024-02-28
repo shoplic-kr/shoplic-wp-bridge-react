@@ -31,7 +31,7 @@ class ReactBridge {
      * vite (yarn start) 로컬 서버의 URL
      * @var string
      */
-    public string $localhostUrl = 'https://localhost:5173';
+    public string $localhostUrl = 'http://localhost:5173';
 
     /**
      * vite로 빌드된 파일들의 URL 경로.
