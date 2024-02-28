@@ -33,8 +33,7 @@ Shoplic WP Bridge React는 WordPress 환경에서 React 기반의 컴포넌트�
 
 ```php
 $absoluteDistPath = get_template_directory() . '/my-react-app/dist';
-$localhostUrl = 'http://localhost:5173';
-shoplic_wp_bridge_react($absoluteDistPath, $localhostUrl)->addShortcode([
+shoplic_wp_bridge_react($absoluteDistPath)->addShortcode([
     'shortcode_name' => 'main_slider',
     'props' => [
         'object_name' => 'main_slider_props',
