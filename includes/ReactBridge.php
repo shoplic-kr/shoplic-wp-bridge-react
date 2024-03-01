@@ -122,7 +122,7 @@ class ReactBridge {
     public function addShortcode($args = []): ReactBridge
     {
         // absolute path
-        $absoluteDistPath = $args['absoluteDistPath'];
+        $absoluteDistPath = $args['absolute_dist_path'];
         if (!$absoluteDistPath) {
             throw new Exception("'absoluteDistPath'가 지정되지 않았습니다.");
         }
