@@ -4,6 +4,7 @@ namespace Shoplic\WPBridgeReact;
 use Exception;
 
 const SHOPLIC_WP_BRIDGE_REACT_VITE_CLIENT_SCRIPT_HANDLE = SHOPLIC_WP_BRIDGE_REACT . '-vite-client-script';
+const SHOPLIC_WP_BRIDGE_REACT_LOCALHOST_URL = 'http://localhost:5173';
 
 /**
  * Vite와 React를 WordPress에서 사용하기 위한 브리지 클래스입니다.
@@ -22,16 +23,10 @@ class ReactBridge {
     public string $manifestPath = '';
 
     /**
-     * vite로 빌드된 파일들이 위치하는 디렉토리의 절대 경로
-     * @var string
-     */
-    public string $absoluteDistPath = '';
-
-    /**
      * vite (yarn start) 로컬 서버의 URL
      * @var string
      */
-    public string $localhostUrl = 'http://localhost:5173';
+    public string $localhostUrl = '';
 
     /**
      * vite로 빌드된 파일들의 URL 경로.
@@ -60,10 +55,10 @@ class ReactBridge {
      * @param string $localhostUrl 로컬 서버의 URL
      * @return ReactBridge 인스턴스
      */
-    static public function getInstance(string $absoluteDistPath, string $localhostUrl): ReactBridge
+    static public function getInstance(): ReactBridge
     {
         if (is_null(self::$instance)) {
-            self::$instance = new self($absoluteDistPath, $localhostUrl);
+            self::$instance = new self();
         }
 
         return self::$instance;
@@ -75,16 +70,11 @@ class ReactBridge {
      * @param string $absoluteDistPath 빌드된 파일들이 있는 디렉토리의 절대 경로
      * @param string $localhostUrl 로컬 서버의 URL
      */
-    public function __construct(string $absoluteDistPath, string $localhostUrl)
+    public function __construct()
     {
         if (!is_null(self::$instance)) {
             return self::$instance;
         }
-
-        $this->absoluteDistPath = rtrim($absoluteDistPath, '/');
-        $this->localhostUrl = rtrim($localhostUrl, '/');
-        $this->distUrl = absolutePathToUrl($this->absoluteDistPath);
-        $this->manifestPath = $absoluteDistPath . '/.vite/manifest.json'; // this is for vite5
         
         // script 때문에 여기서 바로 init을 호출하면 안되고, hook에 등록해줘야 합니다
         add_action( 'init', [$this, 'init'] );
@@ -131,6 +121,23 @@ class ReactBridge {
      */
     public function addShortcode($args = []): ReactBridge
     {
+        // absolute path
+        $absoluteDistPath = $args['absoluteDistPath'];
+        if (!$absoluteDistPath) {
+            throw new Exception("'absoluteDistPath'가 지정되지 않았습니다.");
+        }
+        $absoluteDistPath = rtrim($absoluteDistPath, '/');
+
+        // localhost url
+        $localhostUrl = isset($args['localhostUrl']) ? $args['localhostUrl'] : SHOPLIC_WP_BRIDGE_REACT_LOCALHOST_URL;
+        $localhostUrl = rtrim($localhostUrl, '/');
+
+        // disturl
+        $this->distUrl = absolutePathToUrl($absoluteDistPath);
+
+        // manifest path
+        $this->manifestPath = $absoluteDistPath . '/.vite/manifest.json'; // this is for vite5
+
         $shortcode_name = $args['shortcode_name'];
         $props = $args['props'];
         $entry_file_name = $args['entry_file_name'];
