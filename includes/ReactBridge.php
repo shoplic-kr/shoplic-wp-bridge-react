@@ -122,18 +122,15 @@ class ReactBridge {
     public function addShortcode($args = []): ReactBridge
     {
         // absolute path
-        $absoluteDistPath = $args['absolute_dist_path'];
+        $absoluteDistPath = $args['absoluteDistPath'];
         if (!$absoluteDistPath) {
-            throw new Exception("'absolute_dist_path'가 지정되지 않았습니다.");
+            throw new Exception("'absoluteDistPath'가 지정되지 않았습니다.");
         }
         $absoluteDistPath = rtrim($absoluteDistPath, '/');
 
         // localhost url
-        $localhostUrl = isset($args['localhost_url']) ? $args['localhost_url'] : SHOPLIC_WP_BRIDGE_REACT_LOCALHOST_URL;
-        if (!$localhostUrl) {
-            throw new Exception("'localhost_url'이 지정되지 않았습니다.");
-        }
-        $this->localhostUrl = rtrim($localhostUrl, '/');        
+        $localhostUrl = isset($args['localhostUrl']) ? $args['localhostUrl'] : SHOPLIC_WP_BRIDGE_REACT_LOCALHOST_URL;
+        $localhostUrl = rtrim($localhostUrl, '/');
 
         // disturl
         $this->distUrl = absolutePathToUrl($absoluteDistPath);
