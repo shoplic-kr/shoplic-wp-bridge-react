@@ -1,35 +1,35 @@
 # Shoplic WP Bridge React
 
-Shoplic WP Bridge React는 WordPress 환경에서 React 기반의 컴포넌트를 쉽게 사용할 수 있도록 도와주는 플러그인입니다. 이 플러그인을 통해 WordPress의 shortcode를 활용하여 React 컴포넌트를 웹 페이지에 렌더링할 수 있습니다.
+Shoplic WP Bridge React is a plugin designed to facilitate the use of React-based components within the WordPress environment. This plugin enables the rendering of React components on web pages by utilizing WordPress's shortcode.
 
-[사용 에제](https://github.com/shoplic-kr/shoplic-wp-bridge-react-example-theme)
+[Usage Example](https://github.com/shoplic-kr/shoplic-wp-bridge-react-example-theme)
 
-## 주의
+## Attention
 
-- 라이브 모드에서는 `wp-config.php`파일에 꼭 `define('WP_ENVIRONMENT_TYPE', 'production');` 로 설정해 주시거나, `define('WP_ENVIRONMENT_TYPE', 'local');`를 삭제해 주세요.
+- In live mode, it is crucial to set `define('WP_ENVIRONMENT_TYPE', 'production');` in your `wp-config.php` file, or delete `define('WP_ENVIRONMENT_TYPE', 'local');`.
 
-## 주요 기능
+## Key Features
 
-- **React 컴포넌트와의 연결**: WordPress의 shortcode를 통해 React 컴포넌트를 연결하고 렌더링합니다.
-- **개발 모드와 프로덕션 모드 지원**: 개발 중에는 HMR(Hot Module Replacement)을 통해 실시간으로 변경 사항을 반영할 수 있고, 프로덕션 모드에서는 최적화된 assets(css,js)을 사용합니다.
+- **Integration with React Components**: Connects and renders React components via WordPress's shortcode.
+- **Support for Development and Production Modes**: Offers live changes through HMR (Hot Module Replacement) during development and uses optimized assets (css, js) in production mode.
 
-## 시작하기
+## Getting Started
 
-### 필요 조건
-- PHP 7.4 이상
-- Vite5 이상 (vite v4는 오류가 발생합니다)
-- Wordpress 5.9 이상
+### Prerequisites
+- PHP 7.4 or higher
+- Vite5 or higher (errors occur with Vite v4)
+- WordPress 5.9 or higher
 
-### 설치 방법
+### Installation
 
-1. 플러그인 파일을 WordPress 플러그인 디렉토리(`/wp-content/plugins/`)에 업로드합니다.
-2. WordPress 관리자 대시보드에서 플러그인 메뉴로 이동한 후, 'Shoplic WP Bridge React' 플러그인을 활성화합니다.
+1. Upload the plugin files to the WordPress plugin directory (`/wp-content/plugins/`).
+2. Navigate to the plugin menu in your WordPress admin dashboard and activate the 'Shoplic WP Bridge React' plugin.
 
-## 사용 방법
+## How to Use
 
-### Shortcode 등록
+### Registering a Shortcode
 
-`shoplic_wp_bridge_react()->addShortcode` 함수를 사용하여 React 컴포넌트와 연결할 shortcode를 등록할 수 있습니다. 이 함수는 여러 가지 인자값을 받습니다.
+Utilize the `shoplic_wp_bridge_react()->addShortcode` function to register a shortcode for connecting a React component. This function takes several arguments.
 
 ```php
 $absoluteDistPath = get_template_directory() . '/my-react-app/dist';
@@ -45,62 +45,61 @@ shoplic_wp_bridge_react()->addShortcode([
 ]);
 ```
 
-- [필수] `absolute_dist_path`: 빌드시 파일들이 저장될 디렉토리의 full path를 입력해주세요.
-    - 테마에서 사용하는 react라면 `get_template_directory() . '/my-react-app/dist'` 을 사용해주세요.
-    - 플러그인 내부에서 개발중이라면, `plugin_dir_path(__FILE__) . 'my-react-app/dist` 을 사용해주세요.
-- [선택] `localhost_url`: `https://localhost:5713` 처럼 dev모드에서 vite에서 할당해주는 localhost 주소를 입력해주세요. 기본값은 `https://localhost:5713` 입니다.
-- [필수] `shortcode_name`: 등록할 shortcode의 이름입니다.
-- [필수] `props`: shortcode와 연결된 php -> React App으로 넘겨줄 props 입니다.
-- [필수] `props.root_id`: React 컴포넌트를 렌더링할 HTML 요소의 ID 입니다.
-- [필수] `props.object_name`: wordpress의 wp_localize_script 함수를 통해 js에 전달할 props의 객체 이름 입니다.
-- `props.hello`: 커스텀한 값을 props에 추가할 수 있습니다.
-- [필수] `entry_file_name`: React 컴포넌트의 엔트리 파일 경로입니다. src를 기준으로 최종 엔트리 파일까지의 경로를 모두 적어주세요.
+- [Required] `absolute_dist_path`: Enter the full path of the directory where the files will be stored upon build.
+    - If using React within a theme, please use `get_template_directory() . '/my-react-app/dist'`.
+    - If developing inside a plugin, use `plugin_dir_path(__FILE__) . 'my-react-app/dist`.
+- [Optional] `localhost_url`: Enter the localhost address assigned by Vite in dev mode, like `https://localhost:5713`. The default is `https://localhost:5713`.
+- [Required] `shortcode_name`: The name of the shortcode to register.
+- [Required] `props`: The props to pass from PHP to the React App connected via the shortcode.
+- [Required] `props.root_id`: The ID of the HTML element where the React component will be rendered.
+- [Required] `props.object_name`: The name of the object that will be passed to JS through WordPress's wp_localize_script function.
+- `props.hello`: You can add custom values to the props.
+- [Required] `entry_file_name`: The path to the entry file of the React component. Include the entire path from src to the final entry file.
 
+### Creating a React Project (Using Vite)
 
-### React 프로젝트 생성 (Vite 사용)
-
-#### 프로젝트 생성
+#### Project Creation
 ```
 yarn create vite
 ```
 
-#### vite.config.ts 설정
+#### Configuring vite.config.ts
 ```ts
 import react from '@vitejs/plugin-react'
-import tsconfigPaths from 'vite-tsconfig-paths' // typescript를 사용하는 경우에만 넣어주세요
+import tsconfigPaths from 'vite-tsconfig-paths' // Only include if using TypeScript
 import {defineConfig} from 'vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
     build: {
         assetsDir: 'assets',
-        emptyOutDir: true, // 빌드시 outDir 폴더를 삭제합니다(기본적으로 outDir는 'dist'로 설정되어 있습니다)
-        manifest: true, // [필수] manifest파일을 생성합니다. 
+        emptyOutDir: true, // Deletes the outDir folder during build (outDir is typically set to 'dist')
+        manifest: true, // [Required] Generates a manifest file.
         rollupOptions: {
-            input: [ // [필수] entry 파일들을 나열해 줍니다. 숏코드 하나당 엔트리 포인트 한개가 매칭됩니다.
+            input: [ // [Required] List your entry files here. One entry point per shortcode.
                 './src/hello-world/hello-world.tsx',
                 './src/main-slider/main-slider.tsx',
             ]
         },
-        sourcemap: true, // 소스맵을 출력할지 여부를 결정합니다.
+        sourcemap: true, // Determines whether to output a sourcemap.
     },
     plugins: [
         react(),
-        tsconfigPaths(), // typescript를 사용하는 경우에만 넣어주세요
+        tsconfigPaths(), // Only include if using TypeScript
     ],
-    publicDir: false, // 기본적으로 Vite는 빌드할 때 publicDir에서 outDir로 파일을 복사합니다. 이를 비활성화하기 위해 false로 설정해줍니다.
+    publicDir: false, // By default, Vite copies files from publicDir to outDir during build. This disables that behavior.
 })
 ```
 
 #### src/main-slider/main-slider.tsx
 ```tsx
-import 'vite/modulepreload-polyfill' // 중요 polyfill을 import해주어야 합니다
+import 'vite/modulepreload-polyfill' // Important: must import this polyfill
 import {createRoot} from 'react-dom/client'
 import MainSlider from './MainSlider'
 
-// typescript를 사용하는 경우에만 설정해주세요
+// Only set up if using TypeScript
 declare global {
-    const main_slider_props: { // main_slider_props는 props.object_name에 할당한 이름과 동일한 이름을 사용해야 합니다.
+    const main_slider_props: { // main_slider_props should match the name assigned in props.object_name.
         root_id: string,
         slide_speed: string,
     }
@@ -110,19 +109,18 @@ const {root_id, slide_speed} = main_slider_props;
 
 const root = document.getElementById(root_id)
 if (root) {
-    createRoot(root).render(<MainSlider speed={Number(slider_speed ?? 1000)} />)
+    createRoot(root).render(<MainSlider speed={Number(slide_speed ?? 1000)} />)
 }
 ```
 
-### shortcode에서 attribute사용
+### Using attributes in the shortcode
 ```
 [main_slider slide_count=5]
 ```
-위처럼 사용하면,
-`main-slider.tsx`에서 아래와 같이 props에 전달됩니다.
+Used like this, in `main-slider.tsx`, the props will be passed as follows:
 ```tsx
 declare global {
-    const main_slider_props: { // main_slider_props는 props.object_name에 할당한 이름과 동일한 이름을 사용해야 합니다.
+    const main_slider_props: { // main_slider_props should match the name assigned in props.object_name.
         root_id: string,
         slider_speed: string,
         slide_count: string,
@@ -131,20 +129,19 @@ declare global {
 
 const {root_id, slider_speed, slide_count} = main_slider_props;
 
-const root = document.getElementById(root_id)
+The root = document.getElementById(root_id)
 if (root) {
     createRoot(root).render(<MainSlider speed={Number(slider_speed ?? 1000)} count={Number(slide_count ?? 0)} />)
 }
 ```
-```
 
-### 개발모드와 라이브모드 지정
-wp-config.php에 아래와 같이 지정합니다.
+### Specifying Development and Live Modes
+Define in your wp-config.php file as follows:
 
 ```php
-// 개발모드인 경우
+// For development mode
 define('WP_ENVIRONMENT_TYPE', 'local');
 
-// 라이브모드는 따로 지정하지 않으셔도 되고, 혹은 아래와 같이 지정합니다
+// Live mode does not need to be specified separately, or you can define it as follows
 define('WP_ENVIRONMENT_TYPE', 'production');
 ```
