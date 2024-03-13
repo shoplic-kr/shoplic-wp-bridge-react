@@ -1,3 +1,6 @@
+[![korean](https://img.shields.io/badge/lang-ko-blue.svg)](https://github.com/shoplic-kr/shoplic-wp-bridge-react/blob/main/README.ko-kr.md)
+[![english](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/shoplic-kr/shoplic-wp-bridge-react/blob/main/README.md)
+
 # Shoplic WP Bridge React
 
 Shoplic WP Bridge React is a plugin designed to facilitate the use of React-based components within the WordPress environment. This plugin enables the rendering of React components on web pages by utilizing WordPress's shortcode.

@@ -1,3 +1,6 @@
+[![korean](https://img.shields.io/badge/lang-ko-blue.svg)](https://github.com/shoplic-kr/shoplic-wp-bridge-react/blob/main/README.ko-kr.md)
+[![english](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/shoplic-kr/shoplic-wp-bridge-react/blob/main/README.md)
+
 # Shoplic WP Bridge React
 
 Shoplic WP Bridge React는 WordPress 환경에서 React 기반 컴포넌트를 사용하기 쉽게 도와주는 플러그인입니다. 이 플러그인을 통해 WordPress의 Shortcode를 활용하여 웹 페이지에 React 컴포넌트를 렌더링할 수 있습니다.
