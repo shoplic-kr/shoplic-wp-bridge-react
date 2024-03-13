@@ -17,4 +17,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+// Constants
 const SHOPLIC_WP_BRIDGE_REACT = 'shoplic-wp-bridge-react';
+define('SHOPLOC_WP_BRIDGE_REACT_PATH', plugin_dir_path(__FILE__));
+
+// Includes
+require_once(SHOPLOC_WP_BRIDGE_REACT_PATH . 'includes/Functions.php');
+
+// Bootstrap Function
+function shoplic_wp_bridge_react($absoluteDistPath, $localhostUrl = 'http://localhost:5173'): \Shoplic\WPBridgeReact\ReactBridge {
+    return \Shoplic\WPBridgeReact\ReactBridge::getInstance($absoluteDistPath, $localhostUrl);
+}
