@@ -25,6 +25,6 @@ define('SHOPLOC_WP_BRIDGE_REACT_PATH', plugin_dir_path(__FILE__));
 require_once(SHOPLOC_WP_BRIDGE_REACT_PATH . 'includes/Functions.php');
 
 // Bootstrap Function
-function shoplic_wp_bridge_react($absoluteDistPath, $localhostUrl = 'http://localhost:5173'): \Shoplic\WPBridgeReact\ReactBridge {
-    return \Shoplic\WPBridgeReact\ReactBridge::getInstance($absoluteDistPath, $localhostUrl);
+function shoplic_wp_bridge_react(): \Shoplic\WPBridgeReact\ReactBridge {
+    return \Shoplic\WPBridgeReact\ReactBridge::getInstance();
 }
