@@ -29,13 +29,14 @@ Shoplic WP Bridge React는 WordPress 환경에서 React 기반의 컴포넌트�
 
 ### Shortcode 등록
 
-`shoplic_wp_bridge_react(...)->addShortcode` 함수를 사용하여 React 컴포넌트와 연결할 shortcode를 등록할 수 있습니다. 이 함수는 여러 가지 인자값을 받습니다.
+`shoplic_wp_bridge_react()->addShortcode` 함수를 사용하여 React 컴포넌트와 연결할 shortcode를 등록할 수 있습니다. 이 함수는 여러 가지 인자값을 받습니다.
 
 ```php
 $absoluteDistPath = get_template_directory() . '/my-react-app/dist';
-shoplic_wp_bridge_react($absoluteDistPath)->addShortcode([
+shoplic_wp_bridge_react()->addShortcode([
     'shortcode_name' => 'main_slider',
     'props' => [
+        'absolute_dist_path' => $absoluteDistPath,
         'object_name' => 'main_slider_props',
         'root_id' => 'main-slider-root-id',
         'slide_speed' => 5400,
@@ -44,10 +45,10 @@ shoplic_wp_bridge_react($absoluteDistPath)->addShortcode([
 ]);
 ```
 
-- [필수] $absoluteDistPath: 빌드시 파일들이 저장될 디렉토리의 full path를 입력해주세요.
+- [필수] `absolute_dist_path`: 빌드시 파일들이 저장될 디렉토리의 full path를 입력해주세요.
     - 테마에서 사용하는 react라면 `get_template_directory() . '/my-react-app/dist'` 을 사용해주세요.
     - 플러그인 내부에서 개발중이라면, `plugin_dir_path(__FILE__) . 'my-react-app/dist` 을 사용해주세요.
-- $localhostUrl: `https://localhost:5713` 처럼 dev모드에서 vite에서 할당해주는 localhost 주소를 입력해주세요. 기본값은 `https://localhost:5713` 입니다.
+- [선택] `localhost_url`: `https://localhost:5713` 처럼 dev모드에서 vite에서 할당해주는 localhost 주소를 입력해주세요. 기본값은 `https://localhost:5713` 입니다.
 - [필수] `shortcode_name`: 등록할 shortcode의 이름입니다.
 - [필수] `props`: shortcode와 연결된 php -> React App으로 넘겨줄 props 입니다.
 - [필수] `props.root_id`: React 컴포넌트를 렌더링할 HTML 요소의 ID 입니다.
