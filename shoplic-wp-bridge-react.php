@@ -8,7 +8,7 @@
  * Requires PHP: 7.4
  * License:      GPL v2 or later
  * License URI:  https://www.gnu.org/licenses/gpl-2.0.html
- * Version:      0.0.2
+ * Version:      0.0.3
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
