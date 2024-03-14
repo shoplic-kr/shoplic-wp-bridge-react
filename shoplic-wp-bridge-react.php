@@ -9,6 +9,7 @@
  * License:      GPL v2 or later
  * License URI:  https://www.gnu.org/licenses/gpl-2.0.html
  * Version:      0.0.3
+ * GitHub Plugin URI: https://github.com/shoplic-kr/shoplic-wp-bridge-react
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
