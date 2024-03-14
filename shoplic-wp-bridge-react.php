@@ -2,7 +2,7 @@
 /**
  * Plugin Name:  Shoplic WP Bridge React
  * Plugin URI:   https://shoplic.kr
- * Description:  워드프레스에서 리액트를 쉽게 사용할 수 있도록 만든 플러그인입니다.
+ * Description:  It's a plugin designed to make using React easier in WordPress.
  * Author:       쇼플릭
  * Author URI:   https://shoplic.kr
  * Requires PHP: 7.4
